@@ -156,8 +156,6 @@ Configure `.env` with your own OpenAI-compatible provider:
 LLM_BASE_URL=https://api.groq.com/openai/v1
 LLM_API_KEY=YOUR_PRIVATE_KEY
 LLM_MODEL=EXACT_MODEL_ID_FROM_YOUR_ACCOUNT
-# Optional ordered models on the same endpoint/key; tried sequentially on failure.
-LLM_MODELS=MODEL_A,MODEL_B
 ```
 
 No OpenAI or Anthropic subscription is required if your chosen provider supports
@@ -166,9 +164,9 @@ the provider; no model ID or free quota is assumed. The adapter uses HTTP direct
 so an `openai` Python package is not required. Local compatible providers may use
 `http://127.0.0.1:PORT/v1`. Optional fallback is another explicitly configured
 provider, not an unannounced switch to deterministic fixtures.
-When `LLM_MODELS` is set, each listed model is tried sequentially for a role
-request. The first valid structured response wins; no model calls shell commands
-or bypasses approval gates.
+The optional `LLM_FALLBACK_*` settings configure one explicitly selected
+secondary provider. The adapter never silently substitutes fixture outputs, and
+no model can call shell commands or bypass approval gates.
 
 Install and start Docker Desktop (Linux containers), then:
 
