@@ -1,0 +1,5 @@
+{
+  "requirement": "Fix the existing expiration boundary bug: a short link must return 410 when now equals expires_at, without incrementing clicks. Preserve all existing APIs and stored data.",
+  "acceptance": ["Repository symbols and file hashes recorded", "Only shortener/policy.py changes", "At exact expiry redirect returns 410", "Expired request does not increment clicks", "All baseline regression tests pass"],
+  "questions": []
+}

@@ -1,0 +1,6 @@
+{
+  "requirement": "Make expiration handling more reliable.",
+  "acceptance": ["Pause for human clarification", "Record clarification and invalidate stale plans", "Treat exact expiry as expired once clarified", "Run regression and boundary tests", "Require change and release approvals"],
+  "questions": ["Does expiry mean now >= expires_at, including equality?", "Should expired links return 410 and leave click counts unchanged?", "Are API and schema changes allowed, or should this be a policy-only fix?"],
+  "fixture_answer": "Expiry means now >= expires_at. Return 410 without incrementing clicks. Change only the policy; preserve APIs and database schema."
+}

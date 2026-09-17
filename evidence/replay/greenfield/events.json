@@ -1,0 +1,374 @@
+[
+  {
+    "detail": {
+      "baseline_hash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "mode": "fixture",
+      "parent": null,
+      "scenario": "greenfield"
+    },
+    "kind": "created",
+    "revision": 1,
+    "state_hash": "3bbd2a16c9d145c8d4a2f3c9cfec54f53da87c9a1710c53c7a3c63ddd81fc317",
+    "time": 1789638515.8175125,
+    "seq": 1,
+    "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+    "hash": "a6efea670cad823b73b3fff565d3885446e4fd8216f8836940ee1b083180b181"
+  },
+  {
+    "detail": {},
+    "kind": "execution_started",
+    "revision": 1,
+    "state_hash": "4cb866710573b89abb9e72b2228e3d9d66555a2107d53adc2320a87bef247f6f",
+    "time": 1789638515.829749,
+    "seq": 2,
+    "previous": "a6efea670cad823b73b3fff565d3885446e4fd8216f8836940ee1b083180b181",
+    "hash": "2b2a71e8477a7ea97d7fff1bafda958c18f5cbf5b106d4bc414b022442ca02eb"
+  },
+  {
+    "detail": {
+      "nodes": [
+        "requirements"
+      ],
+      "parallel": false
+    },
+    "kind": "batch_started",
+    "revision": 1,
+    "state_hash": "4cb866710573b89abb9e72b2228e3d9d66555a2107d53adc2320a87bef247f6f",
+    "time": 1789638515.8380573,
+    "seq": 3,
+    "previous": "2b2a71e8477a7ea97d7fff1bafda958c18f5cbf5b106d4bc414b022442ca02eb",
+    "hash": "44b1d94d031744229006b0ffa7beceab4b6f38bb87b8b0051e82c39bbf961e62"
+  },
+  {
+    "detail": {
+      "input_hashes": {},
+      "node": "requirements",
+      "output_hash": "6d31c20c22d488abc3f8519e9f46f6a211523fbb0aca7426b7084aba4b240f2a"
+    },
+    "kind": "node_completed",
+    "revision": 1,
+    "state_hash": "1eb33c372f21bba44770b10fcc4e3c68f3e55a081585fdb2d339ee9a2378b9be",
+    "time": 1789638515.84808,
+    "seq": 4,
+    "previous": "44b1d94d031744229006b0ffa7beceab4b6f38bb87b8b0051e82c39bbf961e62",
+    "hash": "404d5c42b6adfc791ae6434f67ce41b19e916c66d185a2a34a894977c231a122"
+  },
+  {
+    "detail": {
+      "nodes": [
+        "architecture",
+        "test_design"
+      ],
+      "parallel": true
+    },
+    "kind": "batch_started",
+    "revision": 1,
+    "state_hash": "1eb33c372f21bba44770b10fcc4e3c68f3e55a081585fdb2d339ee9a2378b9be",
+    "time": 1789638515.856847,
+    "seq": 5,
+    "previous": "404d5c42b6adfc791ae6434f67ce41b19e916c66d185a2a34a894977c231a122",
+    "hash": "5ed6bca466f73b42c40a77616e1db25414252b1f999dea7b463ec5ee65e192ce"
+  },
+  {
+    "detail": {
+      "input_hashes": {
+        "requirements": "6d31c20c22d488abc3f8519e9f46f6a211523fbb0aca7426b7084aba4b240f2a"
+      },
+      "node": "architecture",
+      "output_hash": "a9afa8ddf8784dd11150a58a44c76c5b23c249d71cb05a8c527d60cfc25c6aa2"
+    },
+    "kind": "node_completed",
+    "revision": 1,
+    "state_hash": "002a2c460a98f6ebf79913658a55f29adb201e61c9c8838fd62d57010cb8dd16",
+    "time": 1789638515.8698442,
+    "seq": 6,
+    "previous": "5ed6bca466f73b42c40a77616e1db25414252b1f999dea7b463ec5ee65e192ce",
+    "hash": "119fbce71e3492df5335f0894a62ade96d2785f23600105527adc61bc83eed4d"
+  },
+  {
+    "detail": {
+      "input_hashes": {
+        "requirements": "6d31c20c22d488abc3f8519e9f46f6a211523fbb0aca7426b7084aba4b240f2a"
+      },
+      "node": "test_design",
+      "output_hash": "a13ad3adebe56bd519a4b7ea4a0a58dec22cfd8b4d8260848893ac3c59242565"
+    },
+    "kind": "node_completed",
+    "revision": 1,
+    "state_hash": "00b4cb3cbc39ca74bc5acc6d6185a108709276763328fe3ed73ac3bdfaab692e",
+    "time": 1789638515.8797405,
+    "seq": 7,
+    "previous": "119fbce71e3492df5335f0894a62ade96d2785f23600105527adc61bc83eed4d",
+    "hash": "c88d86e9eb1f99e51c048228b53aa75edee937bfaff5be83912728be71d3cec7"
+  },
+  {
+    "detail": {
+      "nodes": [
+        "implementation"
+      ],
+      "parallel": false
+    },
+    "kind": "batch_started",
+    "revision": 1,
+    "state_hash": "00b4cb3cbc39ca74bc5acc6d6185a108709276763328fe3ed73ac3bdfaab692e",
+    "time": 1789638515.8889906,
+    "seq": 8,
+    "previous": "c88d86e9eb1f99e51c048228b53aa75edee937bfaff5be83912728be71d3cec7",
+    "hash": "b69d1b49fa7c3139f5ed9545620b0d546d8d697b8a582110ab4b4bc77b3e100b"
+  },
+  {
+    "detail": {
+      "input_hashes": {
+        "architecture": "a9afa8ddf8784dd11150a58a44c76c5b23c249d71cb05a8c527d60cfc25c6aa2",
+        "test_design": "a13ad3adebe56bd519a4b7ea4a0a58dec22cfd8b4d8260848893ac3c59242565"
+      },
+      "node": "implementation",
+      "output_hash": "1cac5628bba8c4e5c6f3eb240f91d6bf5b9d70733aa42806ba9520e89a8806a8"
+    },
+    "kind": "node_completed",
+    "revision": 1,
+    "state_hash": "26fc0c25239a8189d0151a08aa2d5454992ac9512c5532c1dd90410a991d3cc8",
+    "time": 1789638515.906354,
+    "seq": 9,
+    "previous": "b69d1b49fa7c3139f5ed9545620b0d546d8d697b8a582110ab4b4bc77b3e100b",
+    "hash": "683ed9de1ed4ed0ef6a4fe273743bc2070e876ed4faa7fcb72e339cb9273b463"
+  },
+  {
+    "detail": {
+      "binding": "5ceb4057114ce2557339ac3781f6ea3d91bd1ff16bb08635db1d311b6704802d",
+      "rationale": "Human review required before file changes or release",
+      "revision": 1,
+      "stage": "change_approval"
+    },
+    "kind": "approval_requested",
+    "revision": 1,
+    "state_hash": "97246f1691f70fa3404a5b39d74be9f623a06e1b1844d4802d2150c50d5071d1",
+    "time": 1789638515.918152,
+    "seq": 10,
+    "previous": "683ed9de1ed4ed0ef6a4fe273743bc2070e876ed4faa7fcb72e339cb9273b463",
+    "hash": "772e153fab6e106e7ea97a0b432f74ea90beb701ed8460a41ae2f4b1a17dfbe7"
+  },
+  {
+    "detail": {
+      "actor": "SIMULATED-DEMO-REVIEWER",
+      "binding": "5ceb4057114ce2557339ac3781f6ea3d91bd1ff16bb08635db1d311b6704802d",
+      "note": "Automated replay approval; not a human sign-off",
+      "rationale": "Human review required before file changes or release",
+      "revision": 1,
+      "stage": "change_approval"
+    },
+    "kind": "approval_granted",
+    "revision": 1,
+    "state_hash": "1040574c009ea73d9fb875dd550f8341ee3eb4d9fd473a011bc1894d45766e61",
+    "time": 1789638515.9319794,
+    "seq": 11,
+    "previous": "772e153fab6e106e7ea97a0b432f74ea90beb701ed8460a41ae2f4b1a17dfbe7",
+    "hash": "c3294fa4d86e8d2663a2567dad6f83d295c3d2e8c6523eb19763d5b25115c536"
+  },
+  {
+    "detail": {},
+    "kind": "execution_started",
+    "revision": 1,
+    "state_hash": "ebdd47b3e5ca3b8ac8fba1e22908477836fa8dc143c17419416c5aa909a886e1",
+    "time": 1789638515.9433892,
+    "seq": 12,
+    "previous": "c3294fa4d86e8d2663a2567dad6f83d295c3d2e8c6523eb19763d5b25115c536",
+    "hash": "deba22ee4cbd3bf7fec635cd9dba9b110d238362d4fe937fed5a07dd35b61bae"
+  },
+  {
+    "detail": {
+      "nodes": [
+        "apply"
+      ],
+      "parallel": false
+    },
+    "kind": "batch_started",
+    "revision": 1,
+    "state_hash": "ebdd47b3e5ca3b8ac8fba1e22908477836fa8dc143c17419416c5aa909a886e1",
+    "time": 1789638515.9521668,
+    "seq": 13,
+    "previous": "deba22ee4cbd3bf7fec635cd9dba9b110d238362d4fe937fed5a07dd35b61bae",
+    "hash": "5feeb0a66ce4a260d3021a58e9c308fc3ede2263f39dc8de22784edb6f2c2ca8"
+  },
+  {
+    "detail": {
+      "input_hashes": {
+        "change_approval": "49e69ff4e9afa75d2aaaeefcc3532ed63305abdba57ed0c0406888d8888ea77e"
+      },
+      "node": "apply",
+      "output_hash": "e5b7664453c270b8f1fd4ab59541d4bb56bf5b674aea1ad020541a626ab1e2be"
+    },
+    "kind": "node_completed",
+    "revision": 1,
+    "state_hash": "4115d68f1f162b00ffab362e882d44c2d286d5d1876fce48e6f9874c63130257",
+    "time": 1789638515.9787147,
+    "seq": 14,
+    "previous": "5feeb0a66ce4a260d3021a58e9c308fc3ede2263f39dc8de22784edb6f2c2ca8",
+    "hash": "44663514357f3cc529efeb2598c04adc6e26db66dc308ac17cd44fc4868acd8c"
+  },
+  {
+    "detail": {
+      "nodes": [
+        "tests",
+        "security"
+      ],
+      "parallel": true
+    },
+    "kind": "batch_started",
+    "revision": 1,
+    "state_hash": "4115d68f1f162b00ffab362e882d44c2d286d5d1876fce48e6f9874c63130257",
+    "time": 1789638515.986184,
+    "seq": 15,
+    "previous": "44663514357f3cc529efeb2598c04adc6e26db66dc308ac17cd44fc4868acd8c",
+    "hash": "7292128091f6bc43e4d0275876203e35bc6f4283f98cfcd40aef5bb9daf09091"
+  },
+  {
+    "detail": {
+      "input_hashes": {
+        "apply": "e5b7664453c270b8f1fd4ab59541d4bb56bf5b674aea1ad020541a626ab1e2be"
+      },
+      "node": "tests",
+      "output_hash": "8ba48c88bfc93ebcfa36836ae815be5231f4044236e402438f17c89567fb90ec"
+    },
+    "kind": "node_completed",
+    "revision": 1,
+    "state_hash": "bb42dd72d02bc76b96f72268586226d0e01aec906e995ca28ec7f6bd135d15f6",
+    "time": 1789638517.9899733,
+    "seq": 16,
+    "previous": "7292128091f6bc43e4d0275876203e35bc6f4283f98cfcd40aef5bb9daf09091",
+    "hash": "454528aa1669ff66d95095946a1fbdb73449c6183b0f925ecdff2ce65c0e49b2"
+  },
+  {
+    "detail": {
+      "input_hashes": {
+        "apply": "e5b7664453c270b8f1fd4ab59541d4bb56bf5b674aea1ad020541a626ab1e2be"
+      },
+      "node": "security",
+      "output_hash": "abafc38a9e446bdccfebfcd5fabfa985f6645412c95be5e7e2de8531e95baac2"
+    },
+    "kind": "node_completed",
+    "revision": 1,
+    "state_hash": "08a29caec12a2d406d0471904336b0cee1603681bd669e5e0ace52b119d98030",
+    "time": 1789638517.9994009,
+    "seq": 17,
+    "previous": "454528aa1669ff66d95095946a1fbdb73449c6183b0f925ecdff2ce65c0e49b2",
+    "hash": "fb95e5de7a38b9838553402e447a718470588d90c472ce32285518110da27ac2"
+  },
+  {
+    "detail": {
+      "nodes": [
+        "documentation"
+      ],
+      "parallel": false
+    },
+    "kind": "batch_started",
+    "revision": 1,
+    "state_hash": "08a29caec12a2d406d0471904336b0cee1603681bd669e5e0ace52b119d98030",
+    "time": 1789638518.0082333,
+    "seq": 18,
+    "previous": "fb95e5de7a38b9838553402e447a718470588d90c472ce32285518110da27ac2",
+    "hash": "5e96daf465123a0393b32c68690f691748e68535290a90022d321fdd17af1693"
+  },
+  {
+    "detail": {
+      "input_hashes": {
+        "security": "abafc38a9e446bdccfebfcd5fabfa985f6645412c95be5e7e2de8531e95baac2",
+        "tests": "8ba48c88bfc93ebcfa36836ae815be5231f4044236e402438f17c89567fb90ec"
+      },
+      "node": "documentation",
+      "output_hash": "2e0a97b666afa956e59c3085073210e635ce04e7c52270415d70bce1a4e47bd3"
+    },
+    "kind": "node_completed",
+    "revision": 1,
+    "state_hash": "fe06ca4e61181e0a30406d6ca44056ef872db2aa1accab7a66b7bcc79e383cae",
+    "time": 1789638518.018766,
+    "seq": 19,
+    "previous": "5e96daf465123a0393b32c68690f691748e68535290a90022d321fdd17af1693",
+    "hash": "1b91fb26835f2af0c77ede625c443da91666d60c6ad61ca210d82efb440aee0e"
+  },
+  {
+    "detail": {
+      "binding": "65c1cfeca8e3001319e1e526374ba03ae14de037b88e021ea8b240a2e9d5310d",
+      "rationale": "Human review required before file changes or release",
+      "revision": 1,
+      "stage": "release_approval"
+    },
+    "kind": "approval_requested",
+    "revision": 1,
+    "state_hash": "e6ba6f1bd9e31792de258d6e9e8e84bdd44f29023300684c5c9d4f6456c4337c",
+    "time": 1789638518.0364509,
+    "seq": 20,
+    "previous": "1b91fb26835f2af0c77ede625c443da91666d60c6ad61ca210d82efb440aee0e",
+    "hash": "3dae9fecec5e7a38765ad3fa01e85a0141294a74e9db248bce37cf7ad0d42199"
+  },
+  {
+    "detail": {
+      "actor": "SIMULATED-DEMO-REVIEWER",
+      "binding": "65c1cfeca8e3001319e1e526374ba03ae14de037b88e021ea8b240a2e9d5310d",
+      "note": "Automated replay approval; not a human sign-off",
+      "rationale": "Human review required before file changes or release",
+      "revision": 1,
+      "stage": "release_approval"
+    },
+    "kind": "approval_granted",
+    "revision": 1,
+    "state_hash": "ced75b22f545151b7d6070e5e3a827adc5655f56df0cb027a1d8b835590023fa",
+    "time": 1789638518.06347,
+    "seq": 21,
+    "previous": "3dae9fecec5e7a38765ad3fa01e85a0141294a74e9db248bce37cf7ad0d42199",
+    "hash": "891e071906755b1a5e1d70bf8d20b8f5efd9339d26a93e1de21f325efbd7ca4a"
+  },
+  {
+    "detail": {},
+    "kind": "execution_started",
+    "revision": 1,
+    "state_hash": "0c8f944bb064ad0cbcac2d0ae2cb177df28e15dbfcc30800dd698ff5243b158b",
+    "time": 1789638518.0840595,
+    "seq": 22,
+    "previous": "891e071906755b1a5e1d70bf8d20b8f5efd9339d26a93e1de21f325efbd7ca4a",
+    "hash": "3f3439d37a4993eaf200d5fe0f2f532ad89afec0750fa9db8714e18718e89879"
+  },
+  {
+    "detail": {
+      "nodes": [
+        "summary"
+      ],
+      "parallel": false
+    },
+    "kind": "batch_started",
+    "revision": 1,
+    "state_hash": "0c8f944bb064ad0cbcac2d0ae2cb177df28e15dbfcc30800dd698ff5243b158b",
+    "time": 1789638518.0948195,
+    "seq": 23,
+    "previous": "3f3439d37a4993eaf200d5fe0f2f532ad89afec0750fa9db8714e18718e89879",
+    "hash": "1a8b493aad13b8218c5d0e0d43107ed3906162a8233d63a264fed8a803eaba77"
+  },
+  {
+    "detail": {
+      "input_hashes": {
+        "release_approval": "391b7a4234ce73810d5a6a55c91a4b6a86f45de2c7a682276a782168429130fd"
+      },
+      "node": "summary",
+      "output_hash": "a04f72747967bf4f2c855dfc30b0423ceb2ce90edefb2f7d6df00531b2316a54"
+    },
+    "kind": "node_completed",
+    "revision": 1,
+    "state_hash": "7e285f9efd7c5cb6aa98af59db3dfdecc468910049b3cbff49311dfbadd10c40",
+    "time": 1789638518.1113443,
+    "seq": 24,
+    "previous": "1a8b493aad13b8218c5d0e0d43107ed3906162a8233d63a264fed8a803eaba77",
+    "hash": "b855d24823a70ce96c68b3d3468d6c21c4325d362b2e372d5147c2a72d631bc2"
+  },
+  {
+    "detail": {
+      "release": "review-ready local artifact; not deployed"
+    },
+    "kind": "completed",
+    "revision": 1,
+    "state_hash": "20ef92664ab8a5b0967f239445c874a427455157934fb5501e601a5785491930",
+    "time": 1789638518.1216078,
+    "seq": 25,
+    "previous": "b855d24823a70ce96c68b3d3468d6c21c4325d362b2e372d5147c2a72d631bc2",
+    "hash": "8f6b11a9d38d6150b6760ad2dd68f1bd298f470497677f4759803926328a6596"
+  }
+]

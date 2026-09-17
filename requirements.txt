@@ -1,0 +1,5 @@
+# Runtime and tests use Python 3.11+ standard library only.
+# Optional production WSGI server (not required for the local demonstration):
+# waitress==3.0.2
+openai 
+load_dotenv

@@ -1,0 +1,12 @@
+{
+  "python": "3.12.7",
+  "platform": "Windows",
+  "tests": 50,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "seconds": 54.572521686553955,
+  "live_provider_tested": false,
+  "docker_execution_tested": false,
+  "note": "Provider transport and failure/fallback tests use mocks. No claim of production certification."
+}

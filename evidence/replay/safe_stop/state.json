@@ -1,0 +1,362 @@
+{
+  "approvals": [
+    {
+      "actor": "SIMULATED-DEMO-REVIEWER",
+      "binding": "04eca674f4c3a0dafdf91ded1b58fb1ff51d0a8cce4c97a5311e8a774899efae",
+      "note": "Automated replay approval; not a human sign-off",
+      "rationale": "Human review required before file changes or release",
+      "revision": 3,
+      "stage": "change_approval",
+      "time": 1789638532.5800471
+    }
+  ],
+  "baseline": {
+    "shortener/__init__.py": "\"\"\"URL shortener business application.\"\"\"\n",
+    "shortener/api.py": "\"\"\"Small WSGI adapter. Bind localhost for evaluation; use a production server for deployment.\"\"\"\nimport argparse\nimport hmac\nimport json\nimport logging\nimport os\nimport re\nimport sqlite3\nimport uuid\nfrom http import HTTPStatus\nfrom wsgiref.simple_server import make_server, WSGIRequestHandler\n\nfrom shortener.service import Problem, Store\n\nLOG = logging.getLogger(\"shortener\")\n\n\ndef create_app(db_path, api_key):\n    if not api_key or len(api_key) < 16:\n        raise ValueError(\"SHORTENER_API_KEY must have at least 16 characters\")\n    store = Store(db_path)\n\n    def app(env, start_response):\n        request_id = uuid.uuid4().hex\n        method, path = env[\"REQUEST_METHOD\"], env.get(\"PATH_INFO\", \"\")\n        status, payload, extra = 200, {}, []\n        try:\n            if path == \"/health\" and method == \"GET\":\n                with store.connection() as db:\n                    db.execute(\"SELECT 1\")\n                payload = {\"status\": \"ok\"}\n            else:\n                store.limit(env.get(\"REMOTE_ADDR\", \"unknown\"))\n                if path.startswith(\"/api/\"):\n                    token = env.get(\"HTTP_AUTHORIZATION\", \"\").removeprefix(\"Bearer \")\n                    if not hmac.compare_digest(token.encode(), api_key.encode()):\n                        raise Problem(401, \"Bearer token required\")\n                if path == \"/api/v1/urls\" and method == \"POST\":\n                    if env.get(\"CONTENT_TYPE\", \"\").split(\";\")[0] != \"application/json\":\n                        raise Problem(415, \"application/json required\")\n                    try:\n                        length = int(env.get(\"CONTENT_LENGTH\") or \"0\")\n                    except ValueError:\n                        raise Problem(400, \"Invalid content length\") from None\n                    if not 0 < length <= 8192:\n                        raise Problem(413, \"Body must be 1-8192 bytes\")\n                    try:\n                        body = json.loads(env[\"wsgi.input\"].read(length))\n                    except (ValueError, UnicodeError):\n                        raise Problem(400, \"Invalid JSON\") from None\n                    payload = store.create(body, env.get(\"HTTP_IDEMPOTENCY_KEY\"))\n                    payload[\"short_path\"] = \"/r/\" + payload[\"code\"]\n                    status = 201\n                elif match := re.fullmatch(r\"/api/v1/urls/([A-Za-z0-9_-]{4,32})(/analytics)?\", path):\n                    code, analytics = match.groups()\n                    if method == \"GET\":\n                        payload = store.analytics(code) if analytics else store.get(code)\n                    elif method == \"DELETE\" and not analytics:\n                        store.disable(code)\n                        payload = {\"disabled\": True}\n                    else:\n                        raise Problem(405, \"Method not allowed\")\n                elif method == \"GET\" and (match := re.fullmatch(r\"/r/([A-Za-z0-9_-]{4,32})\", path)):\n                    status, payload = 302, {\"redirect\": True}\n                    extra.append((\"Location\", store.redirect(match[1])))\n                else:\n                    raise Problem(404, \"Route not found\")\n        except Problem as exc:\n            status, payload = exc.status, {\"error\": exc.message, \"request_id\": request_id}\n        except sqlite3.Error:\n            status, payload = 503, {\"error\": \"Storage temporarily unavailable\", \"request_id\": request_id}\n        except Exception:\n            LOG.error(\"unexpected_failure request_id=%s\", request_id)\n            status, payload = 500, {\"error\": \"Internal error\", \"request_id\": request_id}\n        if status == 429:\n            extra.append((\"Retry-After\", \"60\"))\n        data = json.dumps(payload).encode()\n        start_response(f\"{status} {HTTPStatus(status).phrase}\", [\n            (\"Content-Type\", \"application/json\"), (\"Content-Length\", str(len(data))),\n            (\"X-Request-ID\", request_id), (\"Cache-Control\", \"no-store\"),\n            (\"X-Content-Type-Options\", \"nosniff\"), *extra])\n        LOG.info(json.dumps({\"request_id\": request_id, \"method\": method, \"status\": status}))\n        return [data]\n\n    return app\n\n\nclass PrivateRequestHandler(WSGIRequestHandler):\n    def log_message(self, format, *args):\n        pass  # Structured logs above omit raw URLs, tokens and addresses.\n\n\ndef main():\n    from pathlib import Path\n    if Path(\".env\").exists():\n        for line in Path(\".env\").read_text(encoding=\"utf-8\").splitlines():\n            if line.strip() and not line.lstrip().startswith(\"#\") and \"=\" in line:\n                key, value = line.split(\"=\", 1)\n                os.environ.setdefault(key.strip(), value.strip().strip('\\\"').strip(\"'\"))\n    parser = argparse.ArgumentParser()\n    parser.add_argument(\"--port\", type=int, default=8000)\n    args = parser.parse_args()\n    logging.basicConfig(level=logging.INFO)\n    application = create_app(os.getenv(\"SHORTENER_DB\", \".runtime/shortener.db\"),\n                             os.getenv(\"SHORTENER_API_KEY\", \"\"))\n    print(f\"Local URL service: http://127.0.0.1:{args.port}/health\", flush=True)\n    with make_server(\"127.0.0.1\", args.port, application, handler_class=PrivateRequestHandler) as server:\n        server.serve_forever()\n\n\nif __name__ == \"__main__\":\n    main()\n",
+    "shortener/policy.py": "\"\"\"Initial expiration policy; exact-boundary bug is addressed in brownfield.\"\"\"\n\ndef is_expired(expires_at, now):\n    return expires_at is not None and expires_at < now\n",
+    "shortener/service.py": "\"\"\"Transactional URL storage; no network fetching of user-supplied URLs.\"\"\"\nimport hashlib\nimport ipaddress\nimport json\nimport re\nimport secrets\nimport sqlite3\nimport time\nfrom contextlib import contextmanager\nfrom pathlib import Path\nfrom urllib.parse import urlsplit\n\nfrom shortener.policy import is_expired\n\n\nclass Problem(Exception):\n    def __init__(self, status, message):\n        self.status, self.message = status, message\n        super().__init__(message)\n\n\ndef validate_url(value):\n    if not isinstance(value, str) or len(value) > 2048:\n        raise Problem(422, \"URL must be a string of at most 2048 characters\")\n    if any(ord(c) <= 32 or ord(c) == 127 for c in value):\n        raise Problem(422, \"URL contains whitespace or control characters\")\n    try:\n        parts = urlsplit(value)\n        host = parts.hostname\n        port = parts.port\n    except ValueError:\n        raise Problem(422, \"Malformed URL\") from None\n    if parts.scheme not in {\"http\", \"https\"} or not host or parts.username or parts.password:\n        raise Problem(422, \"Public HTTP(S) URL without credentials required\")\n    if port is not None and not 1 <= port <= 65535:\n        raise Problem(422, \"Invalid port\")\n    if host.lower() == \"localhost\" or host.lower().endswith((\".localhost\", \".local\", \".internal\")):\n        raise Problem(422, \"Local destinations are not permitted\")\n    try:\n        address = ipaddress.ip_address(host)\n    except ValueError:\n        if \".\" not in host or not re.fullmatch(r\"[A-Za-z0-9.-]+\", host):\n            raise Problem(422, \"Public ASCII hostname required\") from None\n    else:\n        if not address.is_global:\n            raise Problem(422, \"Private/reserved address is not permitted\")\n    return value\n\n\nclass Store:\n    def __init__(self, path, clock=time.time, code_factory=None):\n        self.path = str(path)\n        self.clock = clock\n        self.code_factory = code_factory or (lambda: secrets.token_urlsafe(6))\n        Path(path).parent.mkdir(parents=True, exist_ok=True)\n        with self.connection() as db:\n            db.executescript('''\n                PRAGMA journal_mode=WAL;\n                CREATE TABLE IF NOT EXISTS urls (\n                    code TEXT PRIMARY KEY, url TEXT NOT NULL,\n                    created_at REAL NOT NULL, expires_at REAL,\n                    disabled INTEGER NOT NULL DEFAULT 0 CHECK(disabled IN (0,1)),\n                    clicks INTEGER NOT NULL DEFAULT 0 CHECK(clicks >= 0));\n                CREATE TABLE IF NOT EXISTS idempotency (\n                    key TEXT PRIMARY KEY, fingerprint TEXT NOT NULL,\n                    code TEXT NOT NULL REFERENCES urls(code));\n                CREATE TABLE IF NOT EXISTS daily_clicks (\n                    code TEXT NOT NULL REFERENCES urls(code), day TEXT NOT NULL,\n                    clicks INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(code, day));\n                CREATE TABLE IF NOT EXISTS rate_limits (\n                    bucket TEXT PRIMARY KEY, started REAL NOT NULL, count INTEGER NOT NULL);\n            ''')\n\n    @contextmanager\n    def connection(self):\n        db = sqlite3.connect(self.path, timeout=5)\n        db.row_factory = sqlite3.Row\n        db.execute(\"PRAGMA foreign_keys=ON\")\n        try:\n            with db:\n                yield db\n        finally:\n            db.close()\n\n    def limit(self, bucket, maximum=120, window=60):\n        now = self.clock()\n        with self.connection() as db:\n            db.execute(\"BEGIN IMMEDIATE\")\n            db.execute(\"DELETE FROM rate_limits WHERE started < ?\", (now - window,))\n            row = db.execute(\"SELECT count FROM rate_limits WHERE bucket=?\", (bucket,)).fetchone()\n            if row and row[0] >= maximum:\n                raise Problem(429, \"Rate limit exceeded; retry after 60 seconds\")\n            db.execute(\"INSERT INTO rate_limits VALUES(?,?,1) ON CONFLICT(bucket) DO UPDATE SET count=count+1\",\n                       (bucket, now))\n\n    def create(self, body, idem=None):\n        if not isinstance(body, dict) or set(body) - {\"url\", \"alias\", \"ttl_seconds\"}:\n            raise Problem(422, \"Expected url, optional alias and ttl_seconds\")\n        url = validate_url(body.get(\"url\"))\n        alias, ttl = body.get(\"alias\"), body.get(\"ttl_seconds\")\n        if alias is not None and (not isinstance(alias, str) or not re.fullmatch(r\"[A-Za-z0-9_-]{4,32}\", alias)):\n            raise Problem(422, \"Alias must contain 4-32 letters, digits, hyphens or underscores\")\n        if ttl is not None and (type(ttl) is not int or not 1 <= ttl <= 31536000):\n            raise Problem(422, \"ttl_seconds must be an integer between 1 and 31536000\")\n        if idem is not None and (not isinstance(idem, str) or not re.fullmatch(r\"[A-Za-z0-9_-]{1,128}\", idem)):\n            raise Problem(422, \"Invalid Idempotency-Key\")\n        fingerprint = hashlib.sha256(json.dumps(body, sort_keys=True).encode()).hexdigest()\n        now = self.clock()\n        with self.connection() as db:\n            db.execute(\"BEGIN IMMEDIATE\")\n            if idem:\n                old = db.execute(\"SELECT * FROM idempotency WHERE key=?\", (idem,)).fetchone()\n                if old:\n                    if old[\"fingerprint\"] != fingerprint:\n                        raise Problem(409, \"Idempotency key reused with different input\")\n                    return dict(db.execute(\"SELECT * FROM urls WHERE code=?\", (old[\"code\"],)).fetchone())\n            for _ in range(5):\n                code = alias or self.code_factory()\n                try:\n                    db.execute(\"INSERT INTO urls(code,url,created_at,expires_at) VALUES(?,?,?,?)\",\n                               (code, url, now, now + ttl if ttl else None))\n                    break\n                except sqlite3.IntegrityError:\n                    if alias:\n                        raise Problem(409, \"Alias already exists\") from None\n            else:\n                raise Problem(503, \"Could not allocate code after five attempts\")\n            if idem:\n                db.execute(\"INSERT INTO idempotency VALUES(?,?,?)\", (idem, fingerprint, code))\n            return dict(db.execute(\"SELECT * FROM urls WHERE code=?\", (code,)).fetchone())\n\n    def get(self, code):\n        with self.connection() as db:\n            row = db.execute(\"SELECT * FROM urls WHERE code=?\", (code,)).fetchone()\n            if not row:\n                raise Problem(404, \"Link not found\")\n            return dict(row)\n\n    def redirect(self, code):\n        now = self.clock()\n        with self.connection() as db:\n            db.execute(\"BEGIN IMMEDIATE\")\n            row = db.execute(\"SELECT * FROM urls WHERE code=?\", (code,)).fetchone()\n            if not row:\n                raise Problem(404, \"Link not found\")\n            if row[\"disabled\"] or is_expired(row[\"expires_at\"], now):\n                raise Problem(410, \"Link expired or disabled\")\n            db.execute(\"UPDATE urls SET clicks=clicks+1 WHERE code=?\", (code,))\n            day = time.strftime(\"%Y-%m-%d\", time.gmtime(now))\n            db.execute(\"INSERT INTO daily_clicks VALUES(?,?,1) ON CONFLICT(code,day) DO UPDATE SET clicks=clicks+1\",\n                       (code, day))\n            return row[\"url\"]\n\n    def disable(self, code):\n        with self.connection() as db:\n            if db.execute(\"UPDATE urls SET disabled=1 WHERE code=?\", (code,)).rowcount == 0:\n                raise Problem(404, \"Link not found\")\n\n    def analytics(self, code):\n        item = self.get(code)\n        with self.connection() as db:\n            days = [dict(r) for r in db.execute(\"SELECT day,clicks FROM daily_clicks WHERE code=? ORDER BY day\", (code,))]\n        return {\"code\": code, \"clicks\": item[\"clicks\"], \"daily\": days}\n"
+  },
+  "clarification": null,
+  "completed": {
+    "apply": {
+      "files": [
+        "shortener/policy.py"
+      ],
+      "workspace_hash": "5716559156c2a1933a073c721bf71c3ae50b9a4db92c2c1c4a58a52b0cb4b970"
+    },
+    "architecture": {
+      "baseline_hash": "5579922e947be9036bb4d10ea98a2dc3ac6552a8458b346cb70fef5a9c9e3c13",
+      "components": [
+        "HTTP adapter",
+        "transactional SQLite store",
+        "expiration policy"
+      ],
+      "decision": "Use a policy seam for the boundary fix; no schema migration needed",
+      "dependencies": {
+        "apply": [
+          "change_approval"
+        ],
+        "architecture": [
+          "requirements"
+        ],
+        "change_approval": [
+          "implementation"
+        ],
+        "documentation": [
+          "tests",
+          "security"
+        ],
+        "implementation": [
+          "architecture",
+          "test_design"
+        ],
+        "release_approval": [
+          "documentation"
+        ],
+        "requirements": [],
+        "security": [
+          "apply"
+        ],
+        "summary": [
+          "release_approval"
+        ],
+        "test_design": [
+          "requirements"
+        ],
+        "tests": [
+          "apply"
+        ]
+      },
+      "flow": "HTTP -> auth/input validation -> Store -> policy -> SQLite -> response",
+      "impacted": [
+        "shortener/policy.py"
+      ],
+      "inspected_files": {
+        "shortener/__init__.py": "f3aa6fa7db81a43decc210880a082bbfdf258dac6db99ccb82863051d06076a5",
+        "shortener/api.py": "27b6e61f94c2ec7edc696a7b62574794eac3fbd4ea571a8339b5a81dddf3a49c",
+        "shortener/policy.py": "ae6e4e2839701a54a0d05940d814ba4a0422353a2600e7fd4192be1af21f2aa2",
+        "shortener/service.py": "35e98dc363d96f8e65f8dd8820238ceee1d4bf50b9a2e017257cc1ea52dda19d"
+      },
+      "symbols": {
+        "shortener/__init__.py": [],
+        "shortener/api.py": [
+          "create_app",
+          "PrivateRequestHandler",
+          "main",
+          "app",
+          "log_message"
+        ],
+        "shortener/policy.py": [
+          "is_expired"
+        ],
+        "shortener/service.py": [
+          "Problem",
+          "validate_url",
+          "Store",
+          "__init__",
+          "__init__",
+          "connection",
+          "limit",
+          "create",
+          "get",
+          "redirect",
+          "disable",
+          "analytics"
+        ]
+      },
+      "tasks": [
+        {
+          "depends_on": [],
+          "exit_gate": "Structured output and policy validation",
+          "id": "requirements",
+          "role": "requirements",
+          "status": "pending"
+        },
+        {
+          "depends_on": [
+            "requirements"
+          ],
+          "exit_gate": "Structured output and policy validation",
+          "id": "architecture",
+          "role": "architecture",
+          "status": "pending"
+        },
+        {
+          "depends_on": [
+            "requirements"
+          ],
+          "exit_gate": "Structured output and policy validation",
+          "id": "test_design",
+          "role": "test_design",
+          "status": "pending"
+        },
+        {
+          "depends_on": [
+            "architecture",
+            "test_design"
+          ],
+          "exit_gate": "Structured output and policy validation",
+          "id": "implementation",
+          "role": "implementation",
+          "status": "pending"
+        },
+        {
+          "depends_on": [
+            "implementation"
+          ],
+          "exit_gate": "Structured output and policy validation",
+          "id": "change_approval",
+          "role": "change_approval",
+          "status": "pending"
+        },
+        {
+          "depends_on": [
+            "change_approval"
+          ],
+          "exit_gate": "Structured output and policy validation",
+          "id": "apply",
+          "role": "apply",
+          "status": "pending"
+        },
+        {
+          "depends_on": [
+            "apply"
+          ],
+          "exit_gate": "Structured output and policy validation",
+          "id": "tests",
+          "role": "tests",
+          "status": "pending"
+        },
+        {
+          "depends_on": [
+            "apply"
+          ],
+          "exit_gate": "Structured output and policy validation",
+          "id": "security",
+          "role": "security",
+          "status": "pending"
+        },
+        {
+          "depends_on": [
+            "tests",
+            "security"
+          ],
+          "exit_gate": "Structured output and policy validation",
+          "id": "documentation",
+          "role": "documentation",
+          "status": "pending"
+        },
+        {
+          "depends_on": [
+            "documentation"
+          ],
+          "exit_gate": "Structured output and policy validation",
+          "id": "release_approval",
+          "role": "release_approval",
+          "status": "pending"
+        },
+        {
+          "depends_on": [
+            "release_approval"
+          ],
+          "exit_gate": "Structured output and policy validation",
+          "id": "summary",
+          "role": "summary",
+          "status": "pending"
+        }
+      ]
+    },
+    "change_approval": {
+      "binding": "04eca674f4c3a0dafdf91ded1b58fb1ff51d0a8cce4c97a5311e8a774899efae",
+      "rationale": "Human review required before file changes or release",
+      "revision": 3,
+      "stage": "change_approval"
+    },
+    "implementation": {
+      "diffs": {
+        "shortener/policy.py": "--- shortener/policy.py\n+++ shortener/policy.py\n@@ -1,4 +1,5 @@\n-\"\"\"Initial expiration policy; exact-boundary bug is addressed in brownfield.\"\"\"\n+\"\"\"Small versioned business policy; the brownfield agent changes this module.\"\"\"\n+\n \n def is_expired(expires_at, now):\n-    return expires_at is not None and expires_at < now\n+    return expires_at is not None and expires_at <= now\n"
+      },
+      "files": {
+        "shortener/policy.py": "\"\"\"Small versioned business policy; the brownfield agent changes this module.\"\"\"\n\n\ndef is_expired(expires_at, now):\n    return expires_at is not None and expires_at <= now\n"
+      },
+      "mode": "fixture",
+      "patch_hash": "cf702d2bf69ecf6a4ae48be96e84335678de7d7cbd91e219cfa21c502231a37e",
+      "provider_calls": [],
+      "rationale": "Implement approved contract; keep test suite immutable"
+    },
+    "requirements": {
+      "acceptance": [
+        "Repository symbols and file hashes recorded",
+        "Only shortener/policy.py changes",
+        "At exact expiry redirect returns 410",
+        "Expired request does not increment clicks",
+        "All baseline regression tests pass"
+      ],
+      "assumptions": [
+        "Local prototype",
+        "Single trusted reviewer",
+        "No production deployment"
+      ],
+      "clarification": null,
+      "intent": "Fix the existing expiration boundary bug: a short link must return 410 when now equals expires_at, without incrementing clicks. Preserve all existing APIs and stored data.",
+      "scope": [
+        "shortener/policy.py"
+      ]
+    },
+    "security": {
+      "checks": [
+        "allowlisted paths",
+        "Python syntax",
+        "basic dangerous-pattern scan",
+        "approved workspace hash"
+      ],
+      "issues": [],
+      "limitation": "Not a comprehensive SAST or malware detector; live code executes only in Docker",
+      "passed": true
+    },
+    "test_design": {
+      "acceptance": [
+        "Repository symbols and file hashes recorded",
+        "Only shortener/policy.py changes",
+        "At exact expiry redirect returns 410",
+        "Expired request does not increment clicks",
+        "All baseline regression tests pass"
+      ],
+      "additional": "exact expiry boundary",
+      "gate": "Zero failed tests AND static policy checks AND approved content hash",
+      "generated_source": "import unittest\nfrom shortener.policy import is_expired\n\nclass GeneratedAcceptance(unittest.TestCase):\n    def test_no_expiry(self):\n        self.assertFalse(is_expired(None, 100))\n    def test_past_expiry(self):\n        self.assertTrue(is_expired(99, 100))\n",
+      "protected": true,
+      "provider_calls": [],
+      "suite": "tests/test_shortener.py"
+    },
+    "tests": {
+      "executor": "trusted-fixture-host",
+      "fault_injected": true,
+      "log": "test_exact_boundary (test_boundary.BoundaryTests.test_exact_boundary) ... ok\r\ntest_expired_click_not_counted (test_boundary.BoundaryTests.test_expired_click_not_counted) ... ok\r\ntest_no_expiry (test_generated.GeneratedAcceptance.test_no_expiry) ... ok\r\ntest_past_expiry (test_generated.GeneratedAcceptance.test_past_expiry) ... ok\r\ntest_auth (test_shortener.APITests.test_auth) ... ok\r\ntest_health_and_headers (test_shortener.APITests.test_health_and_headers) ... ok\r\ntest_http_flow (test_shortener.APITests.test_http_flow) ... ok\r\ntest_json_and_body_limits (test_shortener.APITests.test_json_and_body_limits) ... ok\r\ntest_rate_limit_http (test_shortener.APITests.test_rate_limit_http) ... ok\r\ntest_weak_key_refused (test_shortener.APITests.test_weak_key_refused) ... ok\r\ntest_alias_conflict (test_shortener.ShortenerTests.test_alias_conflict) ... ok\r\ntest_bad_urls (test_shortener.ShortenerTests.test_bad_urls) ... ok\r\ntest_collision_exhaustion (test_shortener.ShortenerTests.test_collision_exhaustion) ... ok\r\ntest_collision_retry (test_shortener.ShortenerTests.test_collision_retry) ... ok\r\ntest_concurrent_clicks (test_shortener.ShortenerTests.test_concurrent_clicks) ... ok\r\ntest_create_redirect_analytics (test_shortener.ShortenerTests.test_create_redirect_analytics) ... ok\r\ntest_disable (test_shortener.ShortenerTests.test_disable) ... ok\r\ntest_expiration (test_shortener.ShortenerTests.test_expiration) ... ok\r\ntest_idempotency (test_shortener.ShortenerTests.test_idempotency) ... ok\r\ntest_invalid_fields (test_shortener.ShortenerTests.test_invalid_fields) ... ok\r\ntest_not_found (test_shortener.ShortenerTests.test_not_found) ... ok\r\ntest_rate_limit_and_reset (test_shortener.ShortenerTests.test_rate_limit_and_reset) ... ok\r\ntest_sql_parameterization (test_shortener.ShortenerTests.test_sql_parameterization) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 23 tests in 1.665s\r\n\r\nOK\r\n\nEXPLICIT FAULT INJECTION: synthetic validation failure for recovery demonstration.\n",
+      "passed": false,
+      "returncode": 0
+    }
+  },
+  "ended": 1789638534.7327576,
+  "failure_started": 1789638530.8092644,
+  "feedback": {
+    "security": {
+      "checks": [
+        "allowlisted paths",
+        "Python syntax",
+        "basic dangerous-pattern scan",
+        "approved workspace hash"
+      ],
+      "issues": [],
+      "limitation": "Not a comprehensive SAST or malware detector; live code executes only in Docker",
+      "passed": true
+    },
+    "tests": {
+      "executor": "trusted-fixture-host",
+      "fault_injected": true,
+      "log": "test_exact_boundary (test_boundary.BoundaryTests.test_exact_boundary) ... ok\r\ntest_expired_click_not_counted (test_boundary.BoundaryTests.test_expired_click_not_counted) ... ok\r\ntest_no_expiry (test_generated.GeneratedAcceptance.test_no_expiry) ... ok\r\ntest_past_expiry (test_generated.GeneratedAcceptance.test_past_expiry) ... ok\r\ntest_auth (test_shortener.APITests.test_auth) ... ok\r\ntest_health_and_headers (test_shortener.APITests.test_health_and_headers) ... ok\r\ntest_http_flow (test_shortener.APITests.test_http_flow) ... ok\r\ntest_json_and_body_limits (test_shortener.APITests.test_json_and_body_limits) ... ok\r\ntest_rate_limit_http (test_shortener.APITests.test_rate_limit_http) ... ok\r\ntest_weak_key_refused (test_shortener.APITests.test_weak_key_refused) ... ok\r\ntest_alias_conflict (test_shortener.ShortenerTests.test_alias_conflict) ... ok\r\ntest_bad_urls (test_shortener.ShortenerTests.test_bad_urls) ... ok\r\ntest_collision_exhaustion (test_shortener.ShortenerTests.test_collision_exhaustion) ... ok\r\ntest_collision_retry (test_shortener.ShortenerTests.test_collision_retry) ... ok\r\ntest_concurrent_clicks (test_shortener.ShortenerTests.test_concurrent_clicks) ... ok\r\ntest_create_redirect_analytics (test_shortener.ShortenerTests.test_create_redirect_analytics) ... ok\r\ntest_disable (test_shortener.ShortenerTests.test_disable) ... ok\r\ntest_expiration (test_shortener.ShortenerTests.test_expiration) ... ok\r\ntest_idempotency (test_shortener.ShortenerTests.test_idempotency) ... ok\r\ntest_invalid_fields (test_shortener.ShortenerTests.test_invalid_fields) ... ok\r\ntest_not_found (test_shortener.ShortenerTests.test_not_found) ... ok\r\ntest_rate_limit_and_reset (test_shortener.ShortenerTests.test_rate_limit_and_reset) ... ok\r\ntest_sql_parameterization (test_shortener.ShortenerTests.test_sql_parameterization) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 23 tests in 1.665s\r\n\r\nOK\r\n\nEXPLICIT FAULT INJECTION: synthetic validation failure for recovery demonstration.\n",
+      "passed": false,
+      "returncode": 0
+    }
+  },
+  "graph": {
+    "apply": [
+      "change_approval"
+    ],
+    "architecture": [
+      "requirements"
+    ],
+    "change_approval": [
+      "implementation"
+    ],
+    "documentation": [
+      "tests",
+      "security"
+    ],
+    "implementation": [
+      "architecture",
+      "test_design"
+    ],
+    "release_approval": [
+      "documentation"
+    ],
+    "requirements": [],
+    "security": [
+      "apply"
+    ],
+    "summary": [
+      "release_approval"
+    ],
+    "test_design": [
+      "requirements"
+    ],
+    "tests": [
+      "apply"
+    ]
+  },
+  "id": "c81d02e72bb8",
+  "inject": "always",
+  "mode": "fixture",
+  "parent": null,
+  "pending": null,
+  "recoveries": [],
+  "repair_count": 2,
+  "requirement": "Fix the existing expiration boundary bug: a short link must return 410 when now equals expires_at, without incrementing clicks. Preserve all existing APIs and stored data.",
+  "retry_count": 2,
+  "revision": 3,
+  "rollback_count": 3,
+  "scenario": "brownfield",
+  "scenario_contract": {
+    "acceptance": [
+      "Repository symbols and file hashes recorded",
+      "Only shortener/policy.py changes",
+      "At exact expiry redirect returns 410",
+      "Expired request does not increment clicks",
+      "All baseline regression tests pass"
+    ],
+    "questions": [],
+    "requirement": "Fix the existing expiration boundary bug: a short link must return 410 when now equals expires_at, without incrementing clicks. Preserve all existing APIs and stored data."
+  },
+  "started": 1789638528.9738944,
+  "status": "stopped"
+}

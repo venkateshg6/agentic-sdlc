@@ -1,0 +1,13 @@
+flowchart TD
+  requirements --> architecture
+  requirements --> test_design
+  architecture --> implementation
+  test_design --> implementation
+  implementation --> change_approval
+  change_approval --> apply
+  apply --> tests
+  apply --> security
+  tests --> documentation
+  security --> documentation
+  documentation --> release_approval
+  release_approval --> summary

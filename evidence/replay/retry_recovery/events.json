@@ -1,0 +1,581 @@
+[
+  {
+    "detail": {
+      "baseline_hash": "5579922e947be9036bb4d10ea98a2dc3ac6552a8458b346cb70fef5a9c9e3c13",
+      "mode": "fixture",
+      "parent": null,
+      "scenario": "brownfield"
+    },
+    "kind": "created",
+    "revision": 1,
+    "state_hash": "f690da2f577d451ee28dd819d81f42c13a544f67a28ac6b5bb4453ccb9732000",
+    "time": 1789638523.5959888,
+    "seq": 79,
+    "previous": "0000000000000000000000000000000000000000000000000000000000000000",
+    "hash": "419fad8c00915e019ffd8b90533575b609a8a4ad30f87b2d0f33f02d390b5590"
+  },
+  {
+    "detail": {},
+    "kind": "execution_started",
+    "revision": 1,
+    "state_hash": "984700347bce8118ad4816e105f8da39f51ad9c802f695fc8deee09274d943fe",
+    "time": 1789638523.6077852,
+    "seq": 80,
+    "previous": "419fad8c00915e019ffd8b90533575b609a8a4ad30f87b2d0f33f02d390b5590",
+    "hash": "2dcbe22e46666129d9bae9c7505136652e2044463487ca0505d595064bf1d8cf"
+  },
+  {
+    "detail": {
+      "nodes": [
+        "requirements"
+      ],
+      "parallel": false
+    },
+    "kind": "batch_started",
+    "revision": 1,
+    "state_hash": "984700347bce8118ad4816e105f8da39f51ad9c802f695fc8deee09274d943fe",
+    "time": 1789638523.6164753,
+    "seq": 81,
+    "previous": "2dcbe22e46666129d9bae9c7505136652e2044463487ca0505d595064bf1d8cf",
+    "hash": "9fc430ef6b8f7e3c198b3b5af6d3644e11b1e57059f6fe3c4c0f5432d07899be"
+  },
+  {
+    "detail": {
+      "input_hashes": {},
+      "node": "requirements",
+      "output_hash": "2022201e76664ebcba78d44b6475795d5308a7070332e127d5d85e88d5ea1452"
+    },
+    "kind": "node_completed",
+    "revision": 1,
+    "state_hash": "d72562969c3c0a527e32d5557ab630458701af0830a2ffba6826749b7f897164",
+    "time": 1789638523.626487,
+    "seq": 82,
+    "previous": "9fc430ef6b8f7e3c198b3b5af6d3644e11b1e57059f6fe3c4c0f5432d07899be",
+    "hash": "8b964dfb264d27b7219060d231b899662ffcb938bb703008d2c6f27d16b436cd"
+  },
+  {
+    "detail": {
+      "nodes": [
+        "architecture",
+        "test_design"
+      ],
+      "parallel": true
+    },
+    "kind": "batch_started",
+    "revision": 1,
+    "state_hash": "d72562969c3c0a527e32d5557ab630458701af0830a2ffba6826749b7f897164",
+    "time": 1789638523.636808,
+    "seq": 83,
+    "previous": "8b964dfb264d27b7219060d231b899662ffcb938bb703008d2c6f27d16b436cd",
+    "hash": "ee0fa3358d813b4d0f7622bd4fe9ac2fc5a123e45222f51c6d500d219bd979f4"
+  },
+  {
+    "detail": {
+      "input_hashes": {
+        "requirements": "2022201e76664ebcba78d44b6475795d5308a7070332e127d5d85e88d5ea1452"
+      },
+      "node": "architecture",
+      "output_hash": "337962545bef0c468a36bfe3fc19f9246ccf83bb45eed4cb4f941e3f16640164"
+    },
+    "kind": "node_completed",
+    "revision": 1,
+    "state_hash": "1eda7be496196bd48d2272764ec65c7315e1ef958932bb7aa9f9c251262427e9",
+    "time": 1789638523.66291,
+    "seq": 84,
+    "previous": "ee0fa3358d813b4d0f7622bd4fe9ac2fc5a123e45222f51c6d500d219bd979f4",
+    "hash": "46bddce76bacbb363ae0af415b287e747f98eca9f9560bdbf30d399a5b09c6e1"
+  },
+  {
+    "detail": {
+      "input_hashes": {
+        "requirements": "2022201e76664ebcba78d44b6475795d5308a7070332e127d5d85e88d5ea1452"
+      },
+      "node": "test_design",
+      "output_hash": "d7103030f63fa2491c7e19c84ca5ced9c1b29b89becd3af2c9326a345c00d1ee"
+    },
+    "kind": "node_completed",
+    "revision": 1,
+    "state_hash": "282a8faa74126de71ccc07e259815367c920ad585bba9e8513f855c797b59dc2",
+    "time": 1789638523.673718,
+    "seq": 85,
+    "previous": "46bddce76bacbb363ae0af415b287e747f98eca9f9560bdbf30d399a5b09c6e1",
+    "hash": "7005aed4a7f857aad29d5d6276520eb418f122444d389591ef32e5632637fb69"
+  },
+  {
+    "detail": {
+      "nodes": [
+        "implementation"
+      ],
+      "parallel": false
+    },
+    "kind": "batch_started",
+    "revision": 1,
+    "state_hash": "282a8faa74126de71ccc07e259815367c920ad585bba9e8513f855c797b59dc2",
+    "time": 1789638523.683194,
+    "seq": 86,
+    "previous": "7005aed4a7f857aad29d5d6276520eb418f122444d389591ef32e5632637fb69",
+    "hash": "4ba54c15923a9d2615afa4dd8971e0415141d2c6d4521028c296ba72383267fc"
+  },
+  {
+    "detail": {
+      "input_hashes": {
+        "architecture": "337962545bef0c468a36bfe3fc19f9246ccf83bb45eed4cb4f941e3f16640164",
+        "test_design": "d7103030f63fa2491c7e19c84ca5ced9c1b29b89becd3af2c9326a345c00d1ee"
+      },
+      "node": "implementation",
+      "output_hash": "c533c095eddbb8baedc4a3e2862739d66c7b7da3d3c1597ab3c756de8b1f591f"
+    },
+    "kind": "node_completed",
+    "revision": 1,
+    "state_hash": "a619e77a239787402e3cc217e16b4fa2856d48547e5b35851f7a378ab483eea5",
+    "time": 1789638523.696428,
+    "seq": 87,
+    "previous": "4ba54c15923a9d2615afa4dd8971e0415141d2c6d4521028c296ba72383267fc",
+    "hash": "1491e7adb7ae30016be95d875e11e0289a0c18084c1e9f3c094aa11f005baf71"
+  },
+  {
+    "detail": {
+      "binding": "69a117f5856b4ea624ead309dbcd74ce742a0d9ce27a22f7a31cbc893ed7cfbc",
+      "rationale": "Human review required before file changes or release",
+      "revision": 1,
+      "stage": "change_approval"
+    },
+    "kind": "approval_requested",
+    "revision": 1,
+    "state_hash": "2e0c9ac872f815ad2386a1e2d9a5d55818d3b4750c3546b1d7a8ef3340a44ace",
+    "time": 1789638523.708485,
+    "seq": 88,
+    "previous": "1491e7adb7ae30016be95d875e11e0289a0c18084c1e9f3c094aa11f005baf71",
+    "hash": "740aeb69466a78719652e5a29da846319e43293b8339144233a71abe0374f40e"
+  },
+  {
+    "detail": {
+      "actor": "SIMULATED-DEMO-REVIEWER",
+      "binding": "69a117f5856b4ea624ead309dbcd74ce742a0d9ce27a22f7a31cbc893ed7cfbc",
+      "note": "Automated replay approval; not a human sign-off",
+      "rationale": "Human review required before file changes or release",
+      "revision": 1,
+      "stage": "change_approval"
+    },
+    "kind": "approval_granted",
+    "revision": 1,
+    "state_hash": "ce2f017e1efe1ae4d38a3558edf3ccf324001b7ab5e7dc414e40c89e1372a880",
+    "time": 1789638523.722194,
+    "seq": 89,
+    "previous": "740aeb69466a78719652e5a29da846319e43293b8339144233a71abe0374f40e",
+    "hash": "781527ad7ab57e29fd1fbb73820c04011d8ec6eb02d72a241fca4a2660ed32d7"
+  },
+  {
+    "detail": {},
+    "kind": "execution_started",
+    "revision": 1,
+    "state_hash": "af72c1643e0324c1539ab57874d09a301da7deb74f7520e68d384fe4f1cb99ae",
+    "time": 1789638523.7322366,
+    "seq": 90,
+    "previous": "781527ad7ab57e29fd1fbb73820c04011d8ec6eb02d72a241fca4a2660ed32d7",
+    "hash": "1d8b46b25d12f4ea7a62291d7a0541ac8b2b78c3652ab0734416ef679286aded"
+  },
+  {
+    "detail": {
+      "nodes": [
+        "apply"
+      ],
+      "parallel": false
+    },
+    "kind": "batch_started",
+    "revision": 1,
+    "state_hash": "af72c1643e0324c1539ab57874d09a301da7deb74f7520e68d384fe4f1cb99ae",
+    "time": 1789638523.7394867,
+    "seq": 91,
+    "previous": "1d8b46b25d12f4ea7a62291d7a0541ac8b2b78c3652ab0734416ef679286aded",
+    "hash": "e937a8cf2ce6016d2f5fc30ecb2d7715c34fc83e4d52955c13acfb56b67fafe6"
+  },
+  {
+    "detail": {
+      "input_hashes": {
+        "change_approval": "ed1ab5289606f64ffaa3e4fa55311a7653131db0759e6e6aad53fa27d369207b"
+      },
+      "node": "apply",
+      "output_hash": "b080308cc066d689cc23e045dbe644be171562dabd1f74308e4e933b94fb76d3"
+    },
+    "kind": "node_completed",
+    "revision": 1,
+    "state_hash": "06e38cf4fc86131c7b148710a876b9383912b8ec2a8cd2b2d6c27d79c5656dd4",
+    "time": 1789638523.7578971,
+    "seq": 92,
+    "previous": "e937a8cf2ce6016d2f5fc30ecb2d7715c34fc83e4d52955c13acfb56b67fafe6",
+    "hash": "c4368f5c07153d87316ad2c5fb7a1ec022c843dc1fa264db1782bd7e3a398cb2"
+  },
+  {
+    "detail": {
+      "nodes": [
+        "tests",
+        "security"
+      ],
+      "parallel": true
+    },
+    "kind": "batch_started",
+    "revision": 1,
+    "state_hash": "06e38cf4fc86131c7b148710a876b9383912b8ec2a8cd2b2d6c27d79c5656dd4",
+    "time": 1789638523.768238,
+    "seq": 93,
+    "previous": "c4368f5c07153d87316ad2c5fb7a1ec022c843dc1fa264db1782bd7e3a398cb2",
+    "hash": "8fcb14cdef780ad061d87f274066692c75e939ef6cc330b06c508671b53466e4"
+  },
+  {
+    "detail": {
+      "input_hashes": {
+        "apply": "b080308cc066d689cc23e045dbe644be171562dabd1f74308e4e933b94fb76d3"
+      },
+      "node": "tests",
+      "output_hash": "65d8ee1ba299e11e6896532aeab44a5048c27edfde3c2a33d81b611bdbd4d30e"
+    },
+    "kind": "node_completed",
+    "revision": 1,
+    "state_hash": "63ae57fb6a845a793fa6ca20619655f5514642dcf8375a4ce4ff2f8f786e678c",
+    "time": 1789638526.103735,
+    "seq": 94,
+    "previous": "8fcb14cdef780ad061d87f274066692c75e939ef6cc330b06c508671b53466e4",
+    "hash": "21692f72f96a9c2fa3a6ce616aa1c0804cf023d70bcbdec7b3ea98d817394fff"
+  },
+  {
+    "detail": {
+      "input_hashes": {
+        "apply": "b080308cc066d689cc23e045dbe644be171562dabd1f74308e4e933b94fb76d3"
+      },
+      "node": "security",
+      "output_hash": "abafc38a9e446bdccfebfcd5fabfa985f6645412c95be5e7e2de8531e95baac2"
+    },
+    "kind": "node_completed",
+    "revision": 1,
+    "state_hash": "826f0f8b4e5352fc9535add8fbd44bb506bc5f4af871fefd3c25e05d8a222f4a",
+    "time": 1789638526.113259,
+    "seq": 95,
+    "previous": "21692f72f96a9c2fa3a6ce616aa1c0804cf023d70bcbdec7b3ea98d817394fff",
+    "hash": "f2aa5a25e8694e0a1a509c3cebac51bcce78d4069d31056d3cacd9e41e2644c1"
+  },
+  {
+    "detail": {
+      "feedback": {
+        "security": {
+          "checks": [
+            "allowlisted paths",
+            "Python syntax",
+            "basic dangerous-pattern scan",
+            "approved workspace hash"
+          ],
+          "issues": [],
+          "limitation": "Not a comprehensive SAST or malware detector; live code executes only in Docker",
+          "passed": true
+        },
+        "tests": {
+          "executor": "trusted-fixture-host",
+          "fault_injected": true,
+          "log": "test_exact_boundary (test_boundary.BoundaryTests.test_exact_boundary) ... ok\r\ntest_expired_click_not_counted (test_boundary.BoundaryTests.test_expired_click_not_counted) ... ok\r\ntest_no_expiry (test_generated.GeneratedAcceptance.test_no_expiry) ... ok\r\ntest_past_expiry (test_generated.GeneratedAcceptance.test_past_expiry) ... ok\r\ntest_auth (test_shortener.APITests.test_auth) ... ok\r\ntest_health_and_headers (test_shortener.APITests.test_health_and_headers) ... ok\r\ntest_http_flow (test_shortener.APITests.test_http_flow) ... ok\r\ntest_json_and_body_limits (test_shortener.APITests.test_json_and_body_limits) ... ok\r\ntest_rate_limit_http (test_shortener.APITests.test_rate_limit_http) ... ok\r\ntest_weak_key_refused (test_shortener.APITests.test_weak_key_refused) ... ok\r\ntest_alias_conflict (test_shortener.ShortenerTests.test_alias_conflict) ... ok\r\ntest_bad_urls (test_shortener.ShortenerTests.test_bad_urls) ... ok\r\ntest_collision_exhaustion (test_shortener.ShortenerTests.test_collision_exhaustion) ... ok\r\ntest_collision_retry (test_shortener.ShortenerTests.test_collision_retry) ... ok\r\ntest_concurrent_clicks (test_shortener.ShortenerTests.test_concurrent_clicks) ... ok\r\ntest_create_redirect_analytics (test_shortener.ShortenerTests.test_create_redirect_analytics) ... ok\r\ntest_disable (test_shortener.ShortenerTests.test_disable) ... ok\r\ntest_expiration (test_shortener.ShortenerTests.test_expiration) ... ok\r\ntest_idempotency (test_shortener.ShortenerTests.test_idempotency) ... ok\r\ntest_invalid_fields (test_shortener.ShortenerTests.test_invalid_fields) ... ok\r\ntest_not_found (test_shortener.ShortenerTests.test_not_found) ... ok\r\ntest_rate_limit_and_reset (test_shortener.ShortenerTests.test_rate_limit_and_reset) ... ok\r\ntest_sql_parameterization (test_shortener.ShortenerTests.test_sql_parameterization) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 23 tests in 1.946s\r\n\r\nOK\r\n\nEXPLICIT FAULT INJECTION: synthetic validation failure for recovery demonstration.\n",
+          "passed": false,
+          "returncode": 0
+        }
+      },
+      "reason": "Quality gate failed"
+    },
+    "kind": "rolled_back",
+    "revision": 1,
+    "state_hash": "3473ea1043ea610e237dec656a43d0e6869937999eb948811e9a4a7d93dc22a9",
+    "time": 1789638526.1276577,
+    "seq": 96,
+    "previous": "f2aa5a25e8694e0a1a509c3cebac51bcce78d4069d31056d3cacd9e41e2644c1",
+    "hash": "4b9ad4043d0788e49bc17212e7318e338c5968c8d17fa11ab170e832ca6b7b5e"
+  },
+  {
+    "detail": {
+      "attempt": 1,
+      "invalidated": [
+        "implementation",
+        "change_approval",
+        "apply",
+        "tests",
+        "security",
+        "documentation",
+        "release_approval",
+        "summary"
+      ]
+    },
+    "kind": "repair_planned",
+    "revision": 2,
+    "state_hash": "325952c5e8531c34fbabcbe8dcafd6badc3cb3ef6cc91af1ae5ff8af9b06c69c",
+    "time": 1789638526.136299,
+    "seq": 97,
+    "previous": "4b9ad4043d0788e49bc17212e7318e338c5968c8d17fa11ab170e832ca6b7b5e",
+    "hash": "22f932c76aa84a1b9973e50b53de5018f4a31fa230c8f31a58739470e63617fd"
+  },
+  {
+    "detail": {
+      "nodes": [
+        "implementation"
+      ],
+      "parallel": false
+    },
+    "kind": "batch_started",
+    "revision": 2,
+    "state_hash": "325952c5e8531c34fbabcbe8dcafd6badc3cb3ef6cc91af1ae5ff8af9b06c69c",
+    "time": 1789638526.146954,
+    "seq": 98,
+    "previous": "22f932c76aa84a1b9973e50b53de5018f4a31fa230c8f31a58739470e63617fd",
+    "hash": "69953789757613e11d889aa543f6eb1ce18001e7f64361d30a00f4202551f5cb"
+  },
+  {
+    "detail": {
+      "input_hashes": {
+        "architecture": "337962545bef0c468a36bfe3fc19f9246ccf83bb45eed4cb4f941e3f16640164",
+        "test_design": "d7103030f63fa2491c7e19c84ca5ced9c1b29b89becd3af2c9326a345c00d1ee"
+      },
+      "node": "implementation",
+      "output_hash": "c533c095eddbb8baedc4a3e2862739d66c7b7da3d3c1597ab3c756de8b1f591f"
+    },
+    "kind": "node_completed",
+    "revision": 2,
+    "state_hash": "1bd43bc982f3ea99f58bf0f602b96859737f9d9adb83fb49f740ec8dbf25ee69",
+    "time": 1789638526.164086,
+    "seq": 99,
+    "previous": "69953789757613e11d889aa543f6eb1ce18001e7f64361d30a00f4202551f5cb",
+    "hash": "dc25efb7d25cd59c03755151b8475151ba59b245874f23729cb7dbfa2cad3f76"
+  },
+  {
+    "detail": {
+      "binding": "0d15264af6ec226758d77e6b758dad811ab7dab569411668c03eb639c9b7a1e6",
+      "rationale": "Human review required before file changes or release",
+      "revision": 2,
+      "stage": "change_approval"
+    },
+    "kind": "approval_requested",
+    "revision": 2,
+    "state_hash": "713acc8875d100246290d467c47e0a05bdf6b65f91f6a4b1c042f75afd28f58b",
+    "time": 1789638526.1741874,
+    "seq": 100,
+    "previous": "dc25efb7d25cd59c03755151b8475151ba59b245874f23729cb7dbfa2cad3f76",
+    "hash": "2bc5dd102f270e82a711aef22fa281bb9dc8d405ceef5f7046af8a03ef328033"
+  },
+  {
+    "detail": {
+      "actor": "SIMULATED-DEMO-REVIEWER",
+      "binding": "0d15264af6ec226758d77e6b758dad811ab7dab569411668c03eb639c9b7a1e6",
+      "note": "Automated replay approval; not a human sign-off",
+      "rationale": "Human review required before file changes or release",
+      "revision": 2,
+      "stage": "change_approval"
+    },
+    "kind": "approval_granted",
+    "revision": 2,
+    "state_hash": "4ce883e8b444122e8724b38b348696c8bddf3356e38fd6db8edc46c7a02bdff0",
+    "time": 1789638526.1911922,
+    "seq": 101,
+    "previous": "2bc5dd102f270e82a711aef22fa281bb9dc8d405ceef5f7046af8a03ef328033",
+    "hash": "4ba81477f11f07242778b9d1e6516551629d4250ab1dad8d2e7b388b7e7a9c1d"
+  },
+  {
+    "detail": {},
+    "kind": "execution_started",
+    "revision": 2,
+    "state_hash": "3c97137038da517d79e63a6b7e38aff3875b914e16a374650c4b4ee4faad6582",
+    "time": 1789638526.2037234,
+    "seq": 102,
+    "previous": "4ba81477f11f07242778b9d1e6516551629d4250ab1dad8d2e7b388b7e7a9c1d",
+    "hash": "a4968dc035705d6e02348825e3573278b1c8f6c79583487334e9207b3a817120"
+  },
+  {
+    "detail": {
+      "nodes": [
+        "apply"
+      ],
+      "parallel": false
+    },
+    "kind": "batch_started",
+    "revision": 2,
+    "state_hash": "3c97137038da517d79e63a6b7e38aff3875b914e16a374650c4b4ee4faad6582",
+    "time": 1789638526.2131298,
+    "seq": 103,
+    "previous": "a4968dc035705d6e02348825e3573278b1c8f6c79583487334e9207b3a817120",
+    "hash": "442b64ea6a9ad959bc3584a88a4ecd71f93c868890aecac5aadb37c975c3c4c8"
+  },
+  {
+    "detail": {
+      "input_hashes": {
+        "change_approval": "c0bec010d39a92451bc3d120f1bea9f33d335cf2a3b38e2116b0928654cf92a6"
+      },
+      "node": "apply",
+      "output_hash": "b080308cc066d689cc23e045dbe644be171562dabd1f74308e4e933b94fb76d3"
+    },
+    "kind": "node_completed",
+    "revision": 2,
+    "state_hash": "0f7aab36e94b964d14339bca58f9e5b64d60f3bbd44e3ceb93ba04512e958a56",
+    "time": 1789638526.2315753,
+    "seq": 104,
+    "previous": "442b64ea6a9ad959bc3584a88a4ecd71f93c868890aecac5aadb37c975c3c4c8",
+    "hash": "7c0dd6b21181a68c98dc03a95cf06966c20468b78badbab491e67ae20cdb52cd"
+  },
+  {
+    "detail": {
+      "nodes": [
+        "tests",
+        "security"
+      ],
+      "parallel": true
+    },
+    "kind": "batch_started",
+    "revision": 2,
+    "state_hash": "0f7aab36e94b964d14339bca58f9e5b64d60f3bbd44e3ceb93ba04512e958a56",
+    "time": 1789638526.2407637,
+    "seq": 105,
+    "previous": "7c0dd6b21181a68c98dc03a95cf06966c20468b78badbab491e67ae20cdb52cd",
+    "hash": "23a2749fd1aed3f7bcf19b6cec2aacaa45543953335dad2554888259c20eea1f"
+  },
+  {
+    "detail": {
+      "input_hashes": {
+        "apply": "b080308cc066d689cc23e045dbe644be171562dabd1f74308e4e933b94fb76d3"
+      },
+      "node": "tests",
+      "output_hash": "6fe4410c36e594a9f8ccbc3702101795a1272ba6e254d1734d6c7dcd964ec714"
+    },
+    "kind": "node_completed",
+    "revision": 2,
+    "state_hash": "fcb1d517ffa0706cde9588adbac4069b0bc9e8c46301346a28bdb6fdc64d03ab",
+    "time": 1789638528.8632803,
+    "seq": 106,
+    "previous": "23a2749fd1aed3f7bcf19b6cec2aacaa45543953335dad2554888259c20eea1f",
+    "hash": "8202f247865b28f4179419ba43973883f2d6b5d1cfd56bbdfb3bb3298c6c097c"
+  },
+  {
+    "detail": {
+      "input_hashes": {
+        "apply": "b080308cc066d689cc23e045dbe644be171562dabd1f74308e4e933b94fb76d3"
+      },
+      "node": "security",
+      "output_hash": "abafc38a9e446bdccfebfcd5fabfa985f6645412c95be5e7e2de8531e95baac2"
+    },
+    "kind": "node_completed",
+    "revision": 2,
+    "state_hash": "4161edd7b681346a451f643831dc6c3e553340f0c7f9fdab5117026e6254ab9b",
+    "time": 1789638528.874253,
+    "seq": 107,
+    "previous": "8202f247865b28f4179419ba43973883f2d6b5d1cfd56bbdfb3bb3298c6c097c",
+    "hash": "4b0b617487d1182c2781f1b1a184e8d15a5a247c951b0ee3d3a860d5f8863fef"
+  },
+  {
+    "detail": {
+      "nodes": [
+        "documentation"
+      ],
+      "parallel": false
+    },
+    "kind": "batch_started",
+    "revision": 2,
+    "state_hash": "43752e94b449baadf5d475e37f36cff021573f2a1907a5256c74fdfb5821d629",
+    "time": 1789638528.8832574,
+    "seq": 108,
+    "previous": "4b0b617487d1182c2781f1b1a184e8d15a5a247c951b0ee3d3a860d5f8863fef",
+    "hash": "53cbe4903ed69af63176be5ae39e54c7c6b10ff884311be140e72677eb4a48b9"
+  },
+  {
+    "detail": {
+      "input_hashes": {
+        "security": "abafc38a9e446bdccfebfcd5fabfa985f6645412c95be5e7e2de8531e95baac2",
+        "tests": "6fe4410c36e594a9f8ccbc3702101795a1272ba6e254d1734d6c7dcd964ec714"
+      },
+      "node": "documentation",
+      "output_hash": "116e3b227beab54d4616727cf3e3b2763e7f3ed080f377792373e0557f1668a2"
+    },
+    "kind": "node_completed",
+    "revision": 2,
+    "state_hash": "0c3a4393fc4680b2f1e2aed8de31feccf231b82d4ad98ff3d181ee815177288c",
+    "time": 1789638528.8930728,
+    "seq": 109,
+    "previous": "53cbe4903ed69af63176be5ae39e54c7c6b10ff884311be140e72677eb4a48b9",
+    "hash": "ef8262f308d19170b915c960851c520c50c34b1ec299a760209839b7cd1286dc"
+  },
+  {
+    "detail": {
+      "binding": "65afd6805da67532bd22cce685255e01e11dc574509755fe59fffeada78eab77",
+      "rationale": "Human review required before file changes or release",
+      "revision": 2,
+      "stage": "release_approval"
+    },
+    "kind": "approval_requested",
+    "revision": 2,
+    "state_hash": "f55e95e361a2b164735b689dbfda38dcd9ebec4eb3e863ad58cb5bf43fc8f1ef",
+    "time": 1789638528.908486,
+    "seq": 110,
+    "previous": "ef8262f308d19170b915c960851c520c50c34b1ec299a760209839b7cd1286dc",
+    "hash": "db63d3cfbf1822b99d30b1562696bad992b5ad1eac7d88cbd2dcc05e5e68bb98"
+  },
+  {
+    "detail": {
+      "actor": "SIMULATED-DEMO-REVIEWER",
+      "binding": "65afd6805da67532bd22cce685255e01e11dc574509755fe59fffeada78eab77",
+      "note": "Automated replay approval; not a human sign-off",
+      "rationale": "Human review required before file changes or release",
+      "revision": 2,
+      "stage": "release_approval"
+    },
+    "kind": "approval_granted",
+    "revision": 2,
+    "state_hash": "12cc1b1ca23576f37e53866dfa8f144a7645c6932a95645088186ad00ff92073",
+    "time": 1789638528.9271014,
+    "seq": 111,
+    "previous": "db63d3cfbf1822b99d30b1562696bad992b5ad1eac7d88cbd2dcc05e5e68bb98",
+    "hash": "223f4e5b1bf0f3c707e7d561010e7fdf31e87f778aa076330348a8e46d06652e"
+  },
+  {
+    "detail": {},
+    "kind": "execution_started",
+    "revision": 2,
+    "state_hash": "4ef9083f299de44df5b1297375cd3bbb193db1ed105d57399aace35fb3ce3985",
+    "time": 1789638528.9391026,
+    "seq": 112,
+    "previous": "223f4e5b1bf0f3c707e7d561010e7fdf31e87f778aa076330348a8e46d06652e",
+    "hash": "f605f64dd64f955ec5efe2ce42c500b3a88a1642ca9fda29e611c4055f90bcda"
+  },
+  {
+    "detail": {
+      "nodes": [
+        "summary"
+      ],
+      "parallel": false
+    },
+    "kind": "batch_started",
+    "revision": 2,
+    "state_hash": "4ef9083f299de44df5b1297375cd3bbb193db1ed105d57399aace35fb3ce3985",
+    "time": 1789638528.9479563,
+    "seq": 113,
+    "previous": "f605f64dd64f955ec5efe2ce42c500b3a88a1642ca9fda29e611c4055f90bcda",
+    "hash": "7d874c20adf11340a45507e1cf8523ac3ac5c5eaa80ac08deb4602cdf228feef"
+  },
+  {
+    "detail": {
+      "input_hashes": {
+        "release_approval": "88a82f53b3230b0fc8aaf55bae704c851feae316299c3efc3e82ac967c4fc14e"
+      },
+      "node": "summary",
+      "output_hash": "7da53a7fc0f816acf3f9c20bda1cf263b23879326f21aa8cd1883adb2ed95371"
+    },
+    "kind": "node_completed",
+    "revision": 2,
+    "state_hash": "d0d5f88c822e15400b5b2e72122291627c4a0f6e71426a0f79eb959bd8480f0a",
+    "time": 1789638528.9577541,
+    "seq": 114,
+    "previous": "7d874c20adf11340a45507e1cf8523ac3ac5c5eaa80ac08deb4602cdf228feef",
+    "hash": "e54b5827e618528a13c7d600deb04a36478bdc9164e3c8fdb888ab87b03abab2"
+  },
+  {
+    "detail": {
+      "release": "review-ready local artifact; not deployed"
+    },
+    "kind": "completed",
+    "revision": 2,
+    "state_hash": "22eff864c62e2168e512cae75146746c10cd4af231a24681f26abba95441a78b",
+    "time": 1789638528.9667318,
+    "seq": 115,
+    "previous": "e54b5827e618528a13c7d600deb04a36478bdc9164e3c8fdb888ab87b03abab2",
+    "hash": "cf8ba40dbd76ad3b96bf472240081b14473683afa7eb68d3afd6a03763399e53"
+  }
+]

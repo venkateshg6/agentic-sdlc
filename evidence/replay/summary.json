@@ -1,0 +1,53 @@
+{
+  "mode": "fixture replay; approvals simulated",
+  "live_llm_tested": false,
+  "scenarios": {
+    "greenfield": {
+      "id": "fcd3a0f92ede",
+      "status": "completed",
+      "revision": 1
+    },
+    "brownfield": {
+      "id": "4bbbee8fa57c",
+      "status": "completed",
+      "revision": 1
+    },
+    "ambiguous": {
+      "id": "e3806ffd259f",
+      "status": "completed",
+      "revision": 2
+    },
+    "retry_recovery": {
+      "id": "737314771f65",
+      "status": "completed",
+      "revision": 2
+    },
+    "safe_stop": {
+      "id": "c81d02e72bb8",
+      "status": "stopped",
+      "revision": 3
+    },
+    "replan": {
+      "id": "886397ca5acd",
+      "status": "completed",
+      "revision": 2
+    }
+  },
+  "metrics": {
+    "runs": 6,
+    "terminal_runs": 6,
+    "success_rate": 0.8333333333333334,
+    "retry_frequency_per_run": 0.5,
+    "rollback_frequency_per_run": 1.0,
+    "mttr_seconds": 2.760889768600464,
+    "end_to_end_latency_seconds": {
+      "fcd3a0f92ede": 2.3043935298919678,
+      "4bbbee8fa57c": 2.1882612705230713,
+      "e3806ffd259f": 3.242887496948242,
+      "737314771f65": 5.378268003463745,
+      "c81d02e72bb8": 5.758863210678101,
+      "886397ca5acd": 2.3071911334991455
+    },
+    "definitions": "Latency and MTTR include human waiting; terminal failures stay in success denominator. MTTR includes recovered incidents only."
+  }
+}

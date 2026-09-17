@@ -1,0 +1,55 @@
+test_exact_boundary (test_boundary.BoundaryTests.test_exact_boundary) ... ok
+test_expired_click_not_counted (test_boundary.BoundaryTests.test_expired_click_not_counted) ... ok
+test_blank_reviewer_refused (test_engine.EngineTests.test_blank_reviewer_refused) ... ok
+test_checkpoint_resume_new_process_object (test_engine.EngineTests.test_checkpoint_resume_new_process_object) ... ok
+test_crash_recovery (test_engine.EngineTests.test_crash_recovery) ... ok
+test_fixture_custom_requirement_refused (test_engine.EngineTests.test_fixture_custom_requirement_refused) ... ok
+test_gate_blocks_writes (test_engine.EngineTests.test_gate_blocks_writes) ... ok
+test_graph_and_path_guard (test_engine.EngineTests.test_graph_and_path_guard) ... ok
+test_integrity_tamper (test_engine.EngineTests.test_integrity_tamper) ... ok
+test_invalid_fixture_clarification_has_no_side_effects (test_engine.EngineTests.test_invalid_fixture_clarification_has_no_side_effects) ... ok
+test_live_analyst_can_pause_for_clarification (test_engine.EngineTests.test_live_analyst_can_pause_for_clarification) ... ok
+test_live_malformed_role_output_stops (test_engine.EngineTests.test_live_malformed_role_output_stops) ... ok
+test_live_requires_isolation (test_engine.EngineTests.test_live_requires_isolation) ... ok
+test_live_role_contracts_with_mock_provider_and_executor (test_engine.EngineTests.test_live_role_contracts_with_mock_provider_and_executor) ... ok
+test_lock (test_engine.EngineTests.test_lock) ... ok
+test_metrics (test_engine.EngineTests.test_metrics) ... ok
+test_parallel_batches_and_join (test_engine.EngineTests.test_parallel_batches_and_join) ... ok
+test_reject_rolls_back (test_engine.EngineTests.test_reject_rolls_back) ... ok
+test_release_workspace_mutation_refused (test_engine.EngineTests.test_release_workspace_mutation_refused) ... ok
+test_retry_and_reapproval (test_engine.EngineTests.test_retry_and_reapproval) ... ok
+test_revision_invalidates (test_engine.EngineTests.test_revision_invalidates) ... ok
+test_safe_stop_budget (test_engine.EngineTests.test_safe_stop_budget) ... ok
+test_stale_binding (test_engine.EngineTests.test_stale_binding) ... ok
+test_state_tamper (test_engine.EngineTests.test_state_tamper) ... ok
+test_three_scenarios (test_engine.EngineTests.test_three_scenarios) ... ok
+test_untrusted_host_code_refused (test_engine.EngineTests.test_untrusted_host_code_refused) ... ok
+test_socket_roundtrip (test_http_integration.HTTPIntegrationTests.test_socket_roundtrip) ... ok
+test_insecure_remote_refused (test_provider.ProviderTests.test_insecure_remote_refused) ... ok
+test_invalid_json_exhaustion (test_provider.ProviderTests.test_invalid_json_exhaustion) ... ok
+test_retries_and_fallback (test_provider.ProviderTests.test_retries_and_fallback) ... ok
+test_valid_json (test_provider.ProviderTests.test_valid_json) ... ok
+test_auth (test_shortener.APITests.test_auth) ... ok
+test_health_and_headers (test_shortener.APITests.test_health_and_headers) ... ok
+test_http_flow (test_shortener.APITests.test_http_flow) ... ok
+test_json_and_body_limits (test_shortener.APITests.test_json_and_body_limits) ... ok
+test_rate_limit_http (test_shortener.APITests.test_rate_limit_http) ... ok
+test_weak_key_refused (test_shortener.APITests.test_weak_key_refused) ... ok
+test_alias_conflict (test_shortener.ShortenerTests.test_alias_conflict) ... ok
+test_bad_urls (test_shortener.ShortenerTests.test_bad_urls) ... ok
+test_collision_exhaustion (test_shortener.ShortenerTests.test_collision_exhaustion) ... ok
+test_collision_retry (test_shortener.ShortenerTests.test_collision_retry) ... ok
+test_concurrent_clicks (test_shortener.ShortenerTests.test_concurrent_clicks) ... ok
+test_create_redirect_analytics (test_shortener.ShortenerTests.test_create_redirect_analytics) ... ok
+test_disable (test_shortener.ShortenerTests.test_disable) ... ok
+test_expiration (test_shortener.ShortenerTests.test_expiration) ... ok
+test_idempotency (test_shortener.ShortenerTests.test_idempotency) ... ok
+test_invalid_fields (test_shortener.ShortenerTests.test_invalid_fields) ... ok
+test_not_found (test_shortener.ShortenerTests.test_not_found) ... ok
+test_rate_limit_and_reset (test_shortener.ShortenerTests.test_rate_limit_and_reset) ... ok
+test_sql_parameterization (test_shortener.ShortenerTests.test_sql_parameterization) ... ok
+
+----------------------------------------------------------------------
+Ran 50 tests in 54.214s
+
+OK

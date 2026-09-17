@@ -1,0 +1,6 @@
+{
+  "requirement": "Build a URL shortener with authenticated creation, aliases, idempotency, public redirects, click analytics and basic expiry handling.",
+  "acceptance": ["POST returns short code", "GET redirect returns 302", "Invalid destination is rejected", "Aliases are unique", "Clicks update atomically", "Management endpoints require bearer token", "Past expiry returns 410"],
+  "questions": [],
+  "fixture_note": "Uses bundled baseline templates, not an LLM. Baseline contains a deliberately seeded exact-expiry boundary bug for brownfield demonstration."
+}
